@@ -160,7 +160,7 @@ pioasm and putting the resulting header to the target TARGET's inclusion path.
 26 .wrap
 
 //3.3 .WS2812.c File anotation
-  84 int main() {
+`  84 int main() {
  85 //set_sys_clock_48();
  86 stdio_init_all();		//Initialize all of the present standard stdio types that are linked into the binary.
  87 printf("WS2812 Smoke Test, using pin %d", WS2812_PIN);	//Prints out the WS2812_PIN value
@@ -192,7 +192,7 @@ pioasm and putting the resulting header to the target TARGET's inclusion path.
 105 t += dir;		// t= t+dir 
 106 }
 107 }
-108 }
+108 }`
 
 
 /////3.4

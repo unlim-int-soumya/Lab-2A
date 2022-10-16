@@ -151,7 +151,6 @@ pioasm and putting the resulting header to the target TARGET's inclusion path.
 
 /////3.4
 <br>
-![](https://github.com/unlim-int-soumya/Lab-2A/blob/main/3.4%20Spreadsheet%201.xlsx)
 
 [This](https://github.com/unlim-int-soumya/Lab-2A/blob/main/3.4%20Spreadsheet%201.xlsx) is the link of the spreadsheet that I have prepared for this portion of the answer
 # Which PIO instance is being used? Which state machine is being used with this PIO instance?

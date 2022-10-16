@@ -354,10 +354,15 @@ int main() {
     int t = 0;      // At T variable 0 value was assigned  
 
     while (1) {        // An infinite while loop was created
+    
         int pat = rand() % count_of(pattern_table); //RAND returns an evenly distributed random real number greater than or equal to 0 and less than 1. Here, count_of() returned the size of pattern table. Finally modulus was calculated
+   
         int dir = (rand() >> 30) & 1 ? 1 : -1;      // Here, ternary operator was used to find the value of "dir" using rand() method
+
         puts(pattern_table[pat].name);              
+
         puts(dir == 1 ? "(forward)" : "(backward)");    //puts() function used to write a line or string to the output(stdout) stream "forward" or "backward"
+        
         for (int i = 0; i < 1000; ++i) {            //This is a loop executed for 1000 times
             pattern_table[pat].pat(NUM_PIXELS, t);
             sleep_ms(10);               //Stalls for 10 unit time

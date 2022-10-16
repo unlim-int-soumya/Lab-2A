@@ -247,7 +247,7 @@ static inline void ws2812_parallel_program_init(PIO pio, uint sm, uint offset, u
 
 
 //3.3 .WS2812.c File anotation
-(https://github.com/unlim-int-soumya/Lab-2A/blob/main/C/Untitled_1.png)
+https://github.com/unlim-int-soumya/Lab-2A/blob/main/C/Untitled_1.png
 
 
 

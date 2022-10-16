@@ -94,7 +94,7 @@ more efficiently than "Bit-Bangling."
 
 
 # What are some cases where directly using the GPIO might be a better choice than using the PIO hardware? 
-
+We can use Bit-Bangling in tasks that require slower protocols. We can use IRQ-based bit banging on simpler embedded systems. LEDs and push buttons are the most common applications for software GPIO access.
 
 # How do you get data into a PIO state machine?
 The OSR serves as a holding place for data entering the state machine through the TX FIFO. Data is loaded into the OSR one 32-bit 
@@ -106,7 +106,10 @@ the left or right and sending the bits that fall off the end to one of a few pot
 GPIO mapping logic enables each state machine to see and manipulate up to 30 GPIOs. Here, we must define the GPIO Pins and PIO 
 instances that will be synchronized for data to exit the PIO state machine.
 
-# In the example, which low-level C SDK function is directly responsible for telling the PIO to set the LED to a new color? How is this function accessed from the main “application” code?
+# In the example, which low-level C SDK function is directly responsible for telling the PIO to set the LED to a new color? 
+put_pixel() helper method above to output a sequence of pixel values while setting LED to a new color value.
+
+# How is this function accessed from the main “application” code?
 The PIO file we just looked at, WS2812.pio, is automatically turned (we'll learn how later) into a header containing our built 
 PIO program binary, any assistance functions we put in the file, and other valuable program information. This is coded as 
 WS2812.pio.h.

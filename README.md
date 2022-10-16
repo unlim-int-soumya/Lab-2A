@@ -123,36 +123,39 @@ pioasm and putting the resulting header to the target TARGET's inclusion path.
 
 
 ///3.3 WS2812.pio's annotations
-  7 .program ws2812			
-;Assembler defined the program as ws2812
- 8 .side_set 1				
-;Here, we’re stealing one of those delay bits to use for "side-set"
+ 7 .program ws2812			;Assembler defined the program as ws2812
+ 
+ 8 .side_set 1				;Here, we’re stealing one of those delay bits to use for "side-set"
+ 
  9 
-10 .define public T1 2			
-;We declared constant with public keyword so the assembler will also write the value in O/P file for other software
+
+10 .define public T1 2			;We declared constant with public keyword so the assembler will also write the value in O/P file for other software
 11 .define public T2 5			
 12 .define public T3 3
 
 ;This is used to set various PIO hardware defaults that the MicroPython PIO library will utilize. In the context of SDK apps, we don't need to be concerned about them.
+
 13
 14 .lang_opt python sideset_init = pico.PIO.OUT_HIGH	
 15 .lang_opt python out_init = pico.PIO.OUT_HIGH
 16 .lang_opt python out_shiftdir = 1
 
 17 
-18 .wrap_target
-;Label tells the assembler in the code to later refer it by name. They are mainly used in jmp instructions.
-19 bitloop:
+18 .wrap_target 			;Label tells the assembler in the code to later refer it by name. They are mainly used in jmp instructions.
 
-;Here, out command takes bits from OSR and writes them somewhere else. [T3-1] means here the number of delay cycles. 
-;There are two types of scratch registers one is x and another one y. And side 0 congifure low 0 pin configured for side-set.
-20 out x, 1 side 0 [T3 - 1] ; Side-set still takes place when instruction stalls
+19 bitloop:			;Here, out command takes bits from OSR and writes them somewhere else. [T3-1] means here the number of delay cycles. There are two types of scratch registers one is x and another one y. And side 0 congifure low 0 pin configured for side-set.
+
+20 out x, 1 side 0 [T3 - 1]	 ;Side-set still takes place when instruction stalls
 
 ;side 1 on the side-set pin (this is the pulse's leading edge) If x == 0, then go to the do zero instruction; otherwise, proceed 
 ;to the next instruction in the sequence. Following the instruction, we wait T1 - 1. (whether the branch is taken or not)
+
 21 jmp !x do_zero side 1 [T1 - 1] ; Branch on the bit we shifted out. Positive pulse Here, It continue driving for a long pulse. 
+
 22 do_one:
+
 23 jmp bitloop side 1 [T2 - 1] ; Continue driving high, for a long pulse. jmp unconditionally back to bitloop (the label we established at the start of the program); the state machine has finished with this data bit and will obtain another from its OSR and Delay for T2 - 1 cycles after the instruction.
+
 24 do_zero:
 
 25 nop side 0 [T2 - 1] ; Or drive low, for a short pulse. This matches with the ".wrap_target" directive at the top of the program. Wrapping is a hardware feature of the state machine which behaves like a wormhole: you go in through the ".wrap" statement and appear at the ".wrap_target" zero cycles later, unless the .wrap is preceded immediately by a jmp whose condition is true.
@@ -161,37 +164,56 @@ pioasm and putting the resulting header to the target TARGET's inclusion path.
 
 //3.3 .WS2812.c File anotation
  84 int main() {
+ 
  85 //set_sys_clock_48();
+ 
  86 stdio_init_all();		//Initialize all of the present standard stdio types that are linked into the binary.
+ 
  87 printf("WS2812 Smoke Test, using pin %d", WS2812_PIN);	//Prints out the WS2812_PIN value
+ 
  88 
+ 
  89 // todo get free sm
+ 
  90 PIO pio = pio0;		// Here, PIO 0 instance was declared
 
 
  91 int sm = 0;			//Here, state machine 0 was declared
+ 
  92 uint offset = pio_add_program(pio, &ws2812_program);	//Here, the instruction was given to load the program to the instruction memory, panicking if not possible.
  
  93 //We utilized the function ws2812 program init to assist the user in instantiating an instance of the LED driver program based on a few parameters.
+ 
  94 ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, IS_RGBW);
 
  95	// At T variable 0 value was assigned  
+ 
  96 int t = 0;
 	// The loop was run forever
+ 
  97 while (1) {
+ 
  98 int pat = rand() % count_of(pattern_table);	//RAND returns an evenly distributed random real number greater than or equal to 0 and less than 1. Here, count_of() returned the size of pattern table. Finally modulus was calculated
 
  99 int dir = (rand() >> 30) & 1 ? 1 : -1;	// Here, ternary operator was used to find the value of "dir" using rand() method
+
 100 puts(pattern_table[pat].name);			
+
 101 puts(dir == 1 ? "(forward)" : "(backward)"); //puts() function used to write a line or string to the output(stdout) stream "forward" or "backward"
 
 //Here, For loop is executed for 1000 times
 102 for (int i = 0; i < 1000; ++i) {
+
 103 pattern_table[pat].pat(NUM_PIXELS, t);
+
 104 sleep_ms(10);		
+
 105 t += dir;		// t= t+dir 
+
 106 }
+
 107 }
+
 108 }
 
 
